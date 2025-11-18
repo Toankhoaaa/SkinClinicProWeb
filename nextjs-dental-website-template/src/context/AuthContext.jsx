@@ -1,8 +1,10 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { loginUser, getProfile, updateProfile } from '../services/api/auth';
+import { validateSignUpForm } from '../utils/validation';
 
 /**
  * Auth Context for managing authentication state
- * Provides modal visibility and user form state management
+ * Provides modal visibility, user form state, and user session management
  */
 const AuthContext = createContext();
 
@@ -17,6 +19,14 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [isSignInOpen, setIsSignInOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const [user, setUser] = useState(null);
+  const [profileData, setProfileData] = useState(null);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isAppointmentsOpen, setIsAppointmentsOpen] = useState(false);
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [profileError, setProfileError] = useState('');
 
   // SignIn form state
   const [signInData, setSignInData] = useState({
@@ -35,9 +45,8 @@ export const AuthProvider = ({ children }) => {
     role: 'patient',
   });
 
-  // Error states
   const [signInError, setSignInError] = useState('');
-  const [signUpError, setSignUpError] = useState('');
+  const [signUpErrors, setSignUpErrors] = useState({});
 
   // Toggle modal functions
   const openSignIn = () => {
@@ -55,7 +64,7 @@ export const AuthProvider = ({ children }) => {
   const openSignUp = () => {
     setIsSignUpOpen(true);
     setIsSignInOpen(false);
-    setSignUpError('');
+    setSignUpErrors({});
   };
 
   const closeSignUp = () => {
@@ -69,8 +78,32 @@ export const AuthProvider = ({ children }) => {
       confirmPassword: '',
       role: 'patient',
     });
-    setSignUpError('');
+    setSignUpErrors({});
   };
+
+  const openProfile = async () => {
+    setIsProfileOpen(true);
+    setProfileLoading(true);
+    setProfileError('');
+    try {
+      const response = await getProfile();
+      console.log('[v0] Profile fetched:', response);
+      setProfileData(response.data);
+    } catch (error) {
+      console.log('[v0] Profile fetch error:', error);
+      setProfileError(error.message || 'Failed to load profile');
+    } finally {
+      setProfileLoading(false);
+    }
+  };
+
+  const closeProfile = () => {
+    setIsProfileOpen(false);
+    setProfileData(null);
+  };
+
+  const openAppointments = () => setIsAppointmentsOpen(true);
+  const closeAppointments = () => setIsAppointmentsOpen(false);
 
   // Switch between modals
   const switchToSignUp = () => {
@@ -83,62 +116,112 @@ export const AuthProvider = ({ children }) => {
     openSignIn();
   };
 
-  // Form submission handlers
-  const handleSignIn = (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     
     if (!signInData.username || !signInData.password) {
       setSignInError('Please fill in all fields');
+      setIsLoading(false);
       return;
     }
 
-    // TODO: Add your API call here for authentication
-    console.log('[v0] SignIn:', signInData);
-    // Example: await loginUser(signInData);
-    
-    closeSignIn();
+    try {
+      const response = await loginUser(signInData);
+      console.log('[v0] Login successful:', response);
+      
+      if (response.user) {
+        setUser(response.user);
+        localStorage.setItem('user', JSON.stringify(response.user));
+      }
+      
+      closeSignIn();
+    } catch (error) {
+      console.log('[v0] Login error:', error);
+      setSignInError(error.message || 'Login failed. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
     
-    if (
-      !signUpData.firstName ||
-      !signUpData.lastName ||
-      !signUpData.email ||
-      !signUpData.username ||
-      !signUpData.password ||
-      !signUpData.confirmPassword
-    ) {
-      setSignUpError('Please fill in all fields');
+    const errors = validateSignUpForm(signUpData);
+    if (Object.keys(errors).length > 0) {
+      setSignUpErrors(errors);
       return;
     }
 
-    if (signUpData.password !== signUpData.confirmPassword) {
-      setSignUpError('Passwords do not match');
-      return;
-    }
+    setIsLoading(true);
+    setSignUpErrors({});
 
-    if (signUpData.password.length < 8) {
-      setSignUpError('Password must be at least 8 characters');
-      return;
+    try {
+      // TODO: Uncomment when backend is ready for registration
+      // const response = await registerUser(signUpData);
+      // console.log('[v0] Registration successful:', response);
+      console.log('[v0] SignUp data validated:', signUpData);
+      closeSignUp();
+    } catch (error) {
+      console.log('[v0] Registration error:', error);
+      setSignUpErrors({ form: error.message || 'Registration failed. Please try again.' });
+    } finally {
+      setIsLoading(false);
     }
-
-    // TODO: Add your API call here for registration
-    console.log('[v0] SignUp:', signUpData);
-    // Example: await registerUser(signUpData);
-    
-    closeSignUp();
   };
+
+  const handleUpdateProfile = async (updatedData) => {
+    setProfileLoading(true);
+    setProfileError('');
+    try {
+      const response = await updateProfile(updatedData);
+      console.log('[v0] Profile updated:', response);
+      setProfileData(response.data);
+      return { success: true };
+    } catch (error) {
+      console.log('[v0] Profile update error:', error);
+      setProfileError(error.message || 'Failed to update profile');
+      return { success: false, error: error.message };
+    } finally {
+      setProfileLoading(false);
+    }
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    setProfileData(null);
+    localStorage.removeItem('user');
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    setIsProfileOpen(false);
+    setIsAppointmentsOpen(false);
+  };
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (error) {
+        console.error('[v0] Failed to parse user data:', error);
+      }
+    }
+  }, []);
 
   const value = {
     // Modal state
     isSignInOpen,
     isSignUpOpen,
+    isProfileOpen,
+    isAppointmentsOpen,
     openSignIn,
     closeSignIn,
     openSignUp,
     closeSignUp,
+    openProfile,
+    closeProfile,
+    openAppointments,
+    closeAppointments,
     switchToSignUp,
     switchToSignIn,
 
@@ -151,12 +234,24 @@ export const AuthProvider = ({ children }) => {
     // Errors
     signInError,
     setSignInError,
-    signUpError,
-    setSignUpError,
+    signUpErrors,
+    setSignUpErrors,
 
     // Handlers
     handleSignIn,
     handleSignUp,
+    handleLogout,
+    handleUpdateProfile,
+    
+    // User state
+    user,
+    setUser,
+    profileData,
+    profileLoading,
+    profileError,
+    
+    // Loading state
+    isLoading,
   };
 
   return (
