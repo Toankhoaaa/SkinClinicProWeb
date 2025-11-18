@@ -41,7 +41,7 @@ const Footer = () => {
               <div className="mb-5">
                 <Image
                   src="/img/logo-light.webp"
-                  alt="Dental Clinic Logo"
+                  alt="Derma Clinic Logo"
                   width={200}
                   height={100}
                   className="text-center"
@@ -93,7 +93,7 @@ const Footer = () => {
 
         <div className="d-md-flex align-items-center justify-content-center">
           <p className="mb-2 mb-lg-0 text-white lato text-center">
-            © {currentYear} Dental Clinic - SEO Optimized Dental Website Template. All rights reserved.
+            © {currentYear} Derma Clinic - Professional Dermatology Website. All rights reserved.
           </p>
         </div>
       </div>

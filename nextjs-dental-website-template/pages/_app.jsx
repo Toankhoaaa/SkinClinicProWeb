@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { Fragment, useEffect, useState } from 'react';
 import ThemeProvider from 'theme/ThemeProvider';
 import Layout from 'components/Layout';
+import { AuthProvider } from '../src/context/AuthContext';
 
 import 'animate.css';
 import 'styles/style.css';
@@ -34,20 +35,21 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>DentalClinic – Free Next.js Template for Dentists & Clinics</title>
         <meta
           name="description"
-          content="Free Next.js Template for Dentists, Clinics & Doctors – Built with Bootstrap"
+          content="Professional Dermatology Clinic offering advanced skin care treatments, acne solutions, laser therapy, and skincare services. Book your appointment today!"
         />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="DentalClinic – Free Next.js Template for Dentists & Clinics" />
-        <meta property="og:description" content="Free Next.js Template for Dentists, Clinics & Doctors – Built with Bootstrap" />
+        <meta property="og:title" content="Derma Clinic – Professional Dermatology Care & Skin Solutions" />
+        <meta property="og:description" content="Expert dermatology services for all your skin health needs. Modern treatments and experienced doctors." />
       </Head>
-      <Layout>
-        <ThemeProvider>
-          {loading ? <div className="page-loader" /> : <Component {...pageProps} />}
-        </ThemeProvider>
-      </Layout>
+      <AuthProvider>
+        <Layout>
+          <ThemeProvider>
+            {loading ? <div className="page-loader" /> : <Component {...pageProps} />}
+          </ThemeProvider>
+        </Layout>
+      </AuthProvider>
     </Fragment>
   );
 }
