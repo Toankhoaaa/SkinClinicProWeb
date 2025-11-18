@@ -14,6 +14,7 @@ const SignInModal = () => {
     signInError,
     handleSignIn,
     switchToSignUp,
+    isLoading,
   } = useAuth();
 
   if (!isSignInOpen) return null;
@@ -23,7 +24,7 @@ const SignInModal = () => {
       {/* Backdrop */}
       <div
         className="modal-backdrop fade show"
-        onClick={closeSignIn}
+        onClick={() => !isLoading && closeSignIn()}
         style={{ display: 'block' }}
       />
 
@@ -37,7 +38,7 @@ const SignInModal = () => {
         aria-hidden="false"
       >
         <div className="modal-dialog modal-dialog-centered" role="document">
-          <div className="modal-content rounded">
+          <div className="modal-content">
             {/* Header */}
             <div className="modal-header p-3 bg-color text-white border-0" style={{ borderRadius: '6px 10px 0 0' }}>
               <h5 className="modal-title text-white" id="signInModalLabel">
@@ -47,6 +48,7 @@ const SignInModal = () => {
                 type="button"
                 className="btn-close btn-close-white"
                 onClick={closeSignIn}
+                disabled={isLoading}
                 aria-label="Close"
               />
             </div>
@@ -75,6 +77,7 @@ const SignInModal = () => {
                     onChange={(e) =>
                       setSignInData({ ...signInData, username: e.target.value })
                     }
+                    disabled={isLoading}
                   />
                 </div>
 
@@ -92,6 +95,7 @@ const SignInModal = () => {
                     onChange={(e) =>
                       setSignInData({ ...signInData, password: e.target.value })
                     }
+                    disabled={isLoading}
                   />
                 </div>
 
@@ -99,8 +103,9 @@ const SignInModal = () => {
                 <button
                   type="submit"
                   className="btn bg-color text-white w-100 mb-3 rounded border-0"
+                  disabled={isLoading}
                 >
-                  Sign In
+                  {isLoading ? 'Signing in...' : 'Sign In'}
                 </button>
               </form>
 
@@ -112,6 +117,7 @@ const SignInModal = () => {
                     type="button"
                     className="btn btn-link p-0 text-decoration-none"
                     onClick={switchToSignUp}
+                    disabled={isLoading}
                     style={{ color: '#003366', fontWeight: 'bold' }}
                   >
                     Sign Up

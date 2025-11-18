@@ -7,6 +7,7 @@ import SocialLinks from 'components/SocialLinks';
 import ListItemLink from 'components/ListItemLink';
 import DropdownToggleLink from 'components/DropdownToggleLink';
 import { useAuth } from '../context/AuthContext';
+import AccountDropdown from './AccountDropdown';
 
 import { services } from '../data';
 
@@ -17,7 +18,7 @@ const Navbar = ({
 }) => {
   const sticky = useSticky(350);
   const navbarRef = useRef(null);
-  const { openSignIn, openSignUp } = useAuth();
+  const { openSignIn, openSignUp, user } = useAuth();
 
   const fixedClassName =
     'navbar navbar-expand-lg center-nav transparent navbar-light navbar-clone fixed';
@@ -98,35 +99,42 @@ const Navbar = ({
             <li className="nav-item" data-bs-dismiss="offcanvas">
               <NextLink href="#" title="Contact Us" className="nav-link" />
             </li>
+            
             <li
               className="nav-item align-items-center d-flex flex-lg-row flex-column mt-2 mt-lg-0 ms-lg-4 merriweather gap-2"
-              data-bs-dismiss="offcanvas"
             >
               <NextLink
                 title="Book Appointment"
                 href="#"
                 className="btn btn-sm bg-color text-white mb-lg-1 rounded border-0"
               />
-              <button
-                type="button"
-                className="btn btn-sm btn-outline-dark rounded border-0"
-                onClick={() => {
-                  openSignUp();
-                  document.querySelector('[data-bs-dismiss="offcanvas"]')?.click();
-                }}
-              >
-                Sign Up
-              </button>
-              <button
-                type="button"
-                className="btn btn-sm btn-outline-dark rounded border-0"
-                onClick={() => {
-                  openSignIn();
-                  document.querySelector('[data-bs-dismiss="offcanvas"]')?.click();
-                }}
-              >
-                Sign In
-              </button>
+              
+              {!user ? (
+                <>
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-outline-dark rounded border-0"
+                    onClick={() => {
+                      openSignUp();
+                      document.querySelector('[data-bs-dismiss="offcanvas"]')?.click();
+                    }}
+                  >
+                    Sign Up
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-sm bg-color text-white rounded border-0"
+                    onClick={() => {
+                      openSignIn();
+                      document.querySelector('[data-bs-dismiss="offcanvas"]')?.click();
+                    }}
+                  >
+                    Sign In
+                  </button>
+                </>
+              ) : (
+                <AccountDropdown />
+              )}
             </li>
           </ul>
 
@@ -134,7 +142,7 @@ const Navbar = ({
           <div className="offcanvas-footer d-lg-none">
             <div>
               <NextLink
-                title="company@gmail.com"
+                title="skin-care@gmail.com"
                 className="link-inverse"
                 href="mailto:company@gmail.com"
               />

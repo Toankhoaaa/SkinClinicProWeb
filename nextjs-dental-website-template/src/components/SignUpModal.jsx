@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 
 /**
  * SignUp Modal Component
- * Displays registration form with full user details
+ * Displays registration form with full user details and validation
  */
 const SignUpModal = () => {
   const {
@@ -11,9 +11,10 @@ const SignUpModal = () => {
     closeSignUp,
     signUpData,
     setSignUpData,
-    signUpError,
+    signUpErrors,
     handleSignUp,
     switchToSignIn,
+    isLoading,
   } = useAuth();
 
   if (!isSignUpOpen) return null;
@@ -23,7 +24,7 @@ const SignUpModal = () => {
       {/* Backdrop */}
       <div
         className="modal-backdrop fade show"
-        onClick={closeSignUp}
+        onClick={() => !isLoading && closeSignUp()}
         style={{ display: 'block' }}
       />
 
@@ -47,6 +48,7 @@ const SignUpModal = () => {
                 type="button"
                 className="btn-close btn-close-white"
                 onClick={closeSignUp}
+                disabled={isLoading}
                 aria-label="Close"
               />
             </div>
@@ -54,10 +56,10 @@ const SignUpModal = () => {
             {/* Body */}
             <div className="modal-body p-4">
               <form onSubmit={handleSignUp}>
-                {/* Error Message */}
-                {signUpError && (
+                {/* Form Error Message */}
+                {signUpErrors.form && (
                   <div className="alert alert-danger" role="alert">
-                    {signUpError}
+                    {signUpErrors.form}
                   </div>
                 )}
 
@@ -69,7 +71,7 @@ const SignUpModal = () => {
                     </label>
                     <input
                       type="text"
-                      className="form-control"
+                      className={`form-control ${signUpErrors.firstName ? 'is-invalid' : ''}`}
                       id="signUpFirstName"
                       placeholder="First name"
                       value={signUpData.firstName}
@@ -79,7 +81,11 @@ const SignUpModal = () => {
                           firstName: e.target.value,
                         })
                       }
+                      disabled={isLoading}
                     />
+                    {signUpErrors.firstName && (
+                      <small className="text-danger">{signUpErrors.firstName}</small>
+                    )}
                   </div>
                   <div className="col-md-6 mb-3">
                     <label htmlFor="signUpLastName" className="form-label">
@@ -87,14 +93,18 @@ const SignUpModal = () => {
                     </label>
                     <input
                       type="text"
-                      className="form-control"
+                      className={`form-control ${signUpErrors.lastName ? 'is-invalid' : ''}`}
                       id="signUpLastName"
                       placeholder="Last name"
                       value={signUpData.lastName}
                       onChange={(e) =>
                         setSignUpData({ ...signUpData, lastName: e.target.value })
                       }
+                      disabled={isLoading}
                     />
+                    {signUpErrors.lastName && (
+                      <small className="text-danger">{signUpErrors.lastName}</small>
+                    )}
                   </div>
                 </div>
 
@@ -105,14 +115,18 @@ const SignUpModal = () => {
                   </label>
                   <input
                     type="email"
-                    className="form-control"
+                    className={`form-control ${signUpErrors.email ? 'is-invalid' : ''}`}
                     id="signUpEmail"
                     placeholder="your@email.com"
                     value={signUpData.email}
                     onChange={(e) =>
                       setSignUpData({ ...signUpData, email: e.target.value })
                     }
+                    disabled={isLoading}
                   />
+                  {signUpErrors.email && (
+                    <small className="text-danger">{signUpErrors.email}</small>
+                  )}
                 </div>
 
                 {/* Username Field */}
@@ -122,14 +136,18 @@ const SignUpModal = () => {
                   </label>
                   <input
                     type="text"
-                    className="form-control"
+                    className={`form-control ${signUpErrors.username ? 'is-invalid' : ''}`}
                     id="signUpUsername"
                     placeholder="Choose a username"
                     value={signUpData.username}
                     onChange={(e) =>
                       setSignUpData({ ...signUpData, username: e.target.value })
                     }
+                    disabled={isLoading}
                   />
+                  {signUpErrors.username && (
+                    <small className="text-danger">{signUpErrors.username}</small>
+                  )}
                 </div>
 
                 {/* Password & Confirm Password Row */}
@@ -140,9 +158,9 @@ const SignUpModal = () => {
                     </label>
                     <input
                       type="password"
-                      className="form-control"
+                      className={`form-control ${signUpErrors.password ? 'is-invalid' : ''}`}
                       id="signUpPassword"
-                      placeholder="Min. 6 characters"
+                      placeholder="Min. 6 characters, not all numbers"
                       value={signUpData.password}
                       onChange={(e) =>
                         setSignUpData({
@@ -150,7 +168,11 @@ const SignUpModal = () => {
                           password: e.target.value,
                         })
                       }
+                      disabled={isLoading}
                     />
+                    {signUpErrors.password && (
+                      <small className="text-danger">{signUpErrors.password}</small>
+                    )}
                   </div>
                   <div className="col-md-6 mb-3">
                     <label htmlFor="signUpConfirmPassword" className="form-label">
@@ -158,7 +180,7 @@ const SignUpModal = () => {
                     </label>
                     <input
                       type="password"
-                      className="form-control"
+                      className={`form-control ${signUpErrors.confirmPassword ? 'is-invalid' : ''}`}
                       id="signUpConfirmPassword"
                       placeholder="Confirm password"
                       value={signUpData.confirmPassword}
@@ -168,7 +190,11 @@ const SignUpModal = () => {
                           confirmPassword: e.target.value,
                         })
                       }
+                      disabled={isLoading}
                     />
+                    {signUpErrors.confirmPassword && (
+                      <small className="text-danger">{signUpErrors.confirmPassword}</small>
+                    )}
                   </div>
                 </div>
 
@@ -184,6 +210,7 @@ const SignUpModal = () => {
                     onChange={(e) =>
                       setSignUpData({ ...signUpData, role: e.target.value })
                     }
+                    disabled={isLoading}
                   >
                     <option value="patient">Patient</option>
                     <option value="doctor">Doctor</option>
@@ -194,8 +221,9 @@ const SignUpModal = () => {
                 <button
                   type="submit"
                   className="btn bg-color text-white w-100 mb-3 rounded border-0"
+                  disabled={isLoading}
                 >
-                  Sign Up
+                  {isLoading ? 'Creating account...' : 'Sign Up'}
                 </button>
               </form>
 
@@ -207,6 +235,7 @@ const SignUpModal = () => {
                     type="button"
                     className="btn btn-link p-0 text-decoration-none"
                     onClick={switchToSignIn}
+                    disabled={isLoading}
                     style={{ color: '#003366', fontWeight: 'bold' }}
                   >
                     Sign In
