@@ -37,7 +37,7 @@ const Services = () => {
             }}
           >
             <h3 className="fs-24 text-white mb-1 mt-n2">
-              <CountUp end={25} suffix="K+" />
+              <CountUp end={15} suffix="K+" />
             </h3>
             <p className="fs-18 merriweather">Patients Treated</p>
           </div>
@@ -51,7 +51,7 @@ const Services = () => {
             style={{ width: `${h2Width}px` }}
           >
             <h3 className="fs-18 fw-bold text-second merriweather mb-0 me-3">
-              Dental Clinic
+              Derma Clinic
             </h3>
             <div
               style={{
@@ -63,7 +63,7 @@ const Services = () => {
           </div>
 
           <h2 className="fs-38 mb-5 merriweather d-inline" ref={h2Ref}>
-            Best Dental Hospital in Location
+            Best Dermatology Clinic in Location
           </h2>
 
           <p className="mb-5 fs-18 text-justify lato">

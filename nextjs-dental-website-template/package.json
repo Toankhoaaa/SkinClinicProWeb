@@ -18,9 +18,27 @@
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-countup": "^6.5.3",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "components": "0.1.0",
+    "theme": "0.1.0",
+    "styles": "0.2.1",
+    "plugins": "0.4.2",
+    "assets": "3.0.1",
+    "hooks": "0.3.2",
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
+    "lucide-react": "0.554.0",
+    "tailwind-merge": "3.4.0",
+    "tailwindcss-animate": "1.0.7",
+    "src": "1.1.2"
   },
   "devDependencies": {
-    "sass": "^1.79.4"
+    "sass": "^1.79.4",
+    "@types/react": "19.2.6",
+    "@types/react-dom": "19.2.3",
+    "@types/node": "24.10.1",
+    "tailwindcss": "4.1.17",
+    "typescript": "5.9.3",
+    "postcss": "8.5.6"
   }
 }

@@ -6,16 +6,18 @@ import NextLink from 'components/NextLink';
 import SocialLinks from 'components/SocialLinks';
 import ListItemLink from 'components/ListItemLink';
 import DropdownToggleLink from 'components/DropdownToggleLink';
+import { useAuth } from '../context/AuthContext';
 
 import { services } from '../data';
 
 const Navbar = ({
-  fancy = false, // <-- ADD THIS
+  fancy = false,
   navOtherClass = 'navbar-other d-flex d-lg-none',
   navClassName = 'navbar navbar-expand-lg center-nav transparent navbar-light',
 }) => {
   const sticky = useSticky(350);
   const navbarRef = useRef(null);
+  const { openSignIn, openSignUp } = useAuth();
 
   const fixedClassName =
     'navbar navbar-expand-lg center-nav transparent navbar-light navbar-clone fixed';
@@ -27,7 +29,7 @@ const Navbar = ({
           href="/"
           title={
             <Image
-              alt="Dental Clinic - SEO Optimized Dental Website Template"
+              alt="Derma Clinic - Professional Dermatology Solutions"
               className="py-2"
               src="/img/logo.webp"
               width={150}
@@ -48,7 +50,7 @@ const Navbar = ({
             href="/"
             title={
               <Image
-                alt="Dental Clinic - SEO Optimized Dental Website Template"
+                alt="Derma Clinic - Professional Dermatology Solutions"
                 className="py-2"
                 src="/img/logo-light.webp"
                 width={150}
@@ -97,7 +99,7 @@ const Navbar = ({
               <NextLink href="#" title="Contact Us" className="nav-link" />
             </li>
             <li
-              className="nav-item align-items-center d-flex mt-2 mt-lg-0 ms-lg-4 merriweather"
+              className="nav-item align-items-center d-flex flex-lg-row flex-column mt-2 mt-lg-0 ms-lg-4 merriweather gap-2"
               data-bs-dismiss="offcanvas"
             >
               <NextLink
@@ -105,6 +107,26 @@ const Navbar = ({
                 href="#"
                 className="btn btn-sm bg-color text-white mb-lg-1 rounded border-0"
               />
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-dark rounded border-0"
+                onClick={() => {
+                  openSignUp();
+                  document.querySelector('[data-bs-dismiss="offcanvas"]')?.click();
+                }}
+              >
+                Sign Up
+              </button>
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-dark rounded border-0"
+                onClick={() => {
+                  openSignIn();
+                  document.querySelector('[data-bs-dismiss="offcanvas"]')?.click();
+                }}
+              >
+                Sign In
+              </button>
             </li>
           </ul>
 

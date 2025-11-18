@@ -1,13 +1,13 @@
 // ===================== Services =====================
 export const services = [
-  { id: 1, title: 'Dental Implants' },
-  { id: 2, title: 'Root Canal Treatment' },
-  { id: 3, title: 'Cavity Filling' },
-  { id: 4, title: 'Orthodontics' },
-  { id: 5, title: 'Teeth Whitening' },
-  { id: 6, title: 'Wisdom Tooth Surgery' },
-  { id: 7, title: 'Crown & Bridges' },
-  { id: 8, title: 'Pediatric Dentistry' }
+  { id: 1, title: 'Acne Treatment' },
+  { id: 2, title: 'Skin Rejuvenation' },
+  { id: 3, title: 'Laser Therapy' },
+  { id: 4, title: 'Psoriasis Treatment' },
+  { id: 5, title: 'Hair Loss Solutions' },
+  { id: 6, title: 'Eczema Management' },
+  { id: 7, title: 'Chemical Peels' },
+  { id: 8, title: 'Mole Removal' }
 ];
 
 // ===================== Useful Links =====================
@@ -31,41 +31,41 @@ export const aboutList1 = [
 export const factList1 = [
   {
     id: 1,
-    number: 20000,
+    number: 15000,
     title: "Patient's Treated",
-    src: '/img/icons/patient-treatment.webp'
+    src: '/img/icons/patient-treatment.png'
   },
   {
     id: 2,
-    number: 13000,
-    title: 'Root Canal Treatment',
-    src: '/img/icons/root-canal-treatment.webp'
+    number: 8500,
+    title: 'Acne Treatments',
+    src: '/img/icons/acne-treatment.png'
   },
   {
     id: 3,
-    number: 350,
-    title: 'Dental Implants',
-    src: '/img/icons/dental-implants.webp'
+    number: 3200,
+    title: 'Laser Therapies',
+    src: '/img/icons/laser-therapy.png'
   }
 ];
 
 export const factList2 = [
   {
     id: 4,
-    number: 300,
-    title: 'Orthodontic Treatment',
-    src: '/img/icons/orthodontic-treatments.webp'
+    number: 2800,
+    title: 'Skin Rejuvenation',
+    src: '/img/icons/skin-rejuvenation.png'
   },
   {
     id: 5,
-    number: 1000,
-    title: 'Smile Makeovers',
-    src: '/img/icons/smile-mackovers.webp'
+    number: 5000,
+    title: 'Hair Loss Treatments',
+    src: '/img/icons/hair-loss.png'
   },
   {
     id: 6,
-    number: 4000,
-    title: 'Pulpectomy For Pediatric Patients',
-    src: '/img/icons/pulpectomy-for-pediatric-patients.webp'
+    number: 3500,
+    title: 'Chemical Peels',
+    src: '/img/icons/chemical-peels.png'
   }
 ];

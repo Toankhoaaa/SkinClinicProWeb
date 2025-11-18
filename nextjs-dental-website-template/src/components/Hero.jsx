@@ -17,21 +17,21 @@ const Hero = () => {
               >
                 <h3
                   className="merriweather fs-24 text-white animate__animated animate__slideInDown animate__delay-1s"
-                  aria-label="10 Years of Dental Excellence"
+                  aria-label="15 Years of Dermatology Excellence"
                 >
-                  10 Years of Dental Excellence
+                  15 Years of Dermatology Excellence
                 </h3>
                 <h1
                   className="merriweather fs-48 mb-4 text-white animate__animated animate__slideInDown animate__delay-2s"
-                  aria-label="Main heading: Your Smile, Our Commitment"
+                  aria-label="Main heading: Healthy Skin, Beautiful You"
                 >
-                  Your Smile, Our Commitment
+                  Healthy Skin, Beautiful You
                 </h1>
                 <p
                   className="lato lead fs-18 lh-sm mb-7 text-white animate__animated animate__slideInRight animate__delay-3s"
                   aria-label="Supporting text"
                 >
-                  Discover the difference exceptional dentistry makes with Dental Clinic — an SEO-optimized dental website template.
+                  Discover the difference expert dermatology care makes with Derma Clinic — your trusted skin health partner.
                 </p>
                 <div className="animate__animated animate__slideInUp animate__delay-3s merriweather">
                   <NextLink
